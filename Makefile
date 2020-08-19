@@ -12,8 +12,13 @@ TOP_MODULE = "fibonacci_top"
 
 simulate:
 	@echo "Performing simulation"
-	@echo $(VPATH)
+	@echo $(CPATH)
 	$(VERILATOR) --cc $(VPATH) --exe $(CPATH) --top-module $(TOP_MODULE)
 	make -j -C obj_dir -f Vfibonacci_top.mk
 
 synthetize:
+	@echo "Suppose it has uploaded to the FPGA"
+
+clean:
+	@echo "Deleting output folder"
+	rm -r obj_dir
