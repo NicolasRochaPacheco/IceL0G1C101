@@ -24,3 +24,5 @@ always @ ( * ) begin
   else
     data_out = data_b_in;
 end
+
+endmodule

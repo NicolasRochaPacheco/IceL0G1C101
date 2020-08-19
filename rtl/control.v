@@ -2,7 +2,7 @@
 
 
 
-module CONTROL (
+module control (
 	clock_in,
 	reset_in,
 	zero_flag_in,
@@ -24,10 +24,17 @@ module CONTROL (
 input clock_in;
 input reset_in;
 input zero_flag_in;
+input t0_int_in;
+input t1_int_in;
+input t2_int_in;
 output reg mux_sel_out;
 output reg x1_set_out;
 output reg x2_set_out;
 output reg x3_set_out;
+output reg x4_set_out;
+output reg t0_start_out;
+output reg t1_start_out;
+output reg t2_start_out;
 output reg led_out;
 
 // Registers definition
@@ -147,7 +154,7 @@ begin
 			3'b010: state_reg = 3'b011;
 			3'b011: if(t1_int_in)
 								state_reg = 3'b100;
-							else:
+							else
 								state_reg = 3'b011;
 			3'b100: if (zero_flag_in)
 								state_reg = 3'b110;
@@ -161,6 +168,7 @@ begin
 								state_reg = 3'b000;
 							else
 								state_reg = 3'b110;
+			default: state_reg = state_reg;
 		endcase
 end
 

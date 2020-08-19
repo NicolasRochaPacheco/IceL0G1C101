@@ -5,7 +5,12 @@ module fibonacci_top (
   clock_in,
   reset_in,
   led_out
-)
+);
+
+// Input and output definition
+input clock_in;
+input reset_in;
+output led_out;
 
 // Wire definition
 wire x1_set_wire;
@@ -38,7 +43,7 @@ wire t2_start_wire;
 control control0 (
   .clock_in(clock_in),
   .reset_in(reset_in),
-  .zero_flag_in(zero_wire)
+  .zero_flag_in(zero_wire),
   .t0_int_in(t0_int_wire),
 	.t1_int_in(t1_int_wire),
 	.t2_int_in(t2_int_wire),
@@ -57,7 +62,7 @@ gen_reg #(.DATA_WIDTH(4)) x1 (
   .clock_in(clock_in),
   .reset_in(reset_in),
   .set_in(x1_set_wire),
-  .data_in(x2_data_wire)
+  .data_in(x2_data_wire),
   .data_out(x1_data_wire)
 );
 
@@ -65,7 +70,7 @@ gen_reg #(.DATA_WIDTH(4), .RESET_VALUE(0)) x2 (
   .clock_in(clock_in),
   .reset_in(reset_in),
   .set_in(x2_set_wire),
-  .data_in(x3_data_wire)
+  .data_in(x3_data_wire),
   .data_out(x2_data_wire)
 );
 
@@ -73,7 +78,7 @@ gen_reg #(.DATA_WIDTH(4)) x3 (
   .clock_in(clock_in),
   .reset_in(reset_in),
   .set_in(x3_set_wire),
-  .data_in(adder_data_wire)
+  .data_in(adder_data_wire),
   .data_out(x3_data_wire)
 );
 
@@ -81,7 +86,7 @@ gen_reg #(.DATA_WIDTH(4)) x4 (
   .clock_in(clock_in),
   .reset_in(reset_in),
   .set_in(x4_set_wire),
-  .data_in(mux_data_wire)
+  .data_in(mux_data_wire),
   .data_out(x4_data_wire)
 );
 
@@ -89,7 +94,7 @@ gen_reg #(.DATA_WIDTH(4), .RESET_VALUE(5)) x5 (
   .clock_in(clock_in),
   .reset_in(reset_in),
   .set_in(x5_set_wire),
-  .data_in()
+  .data_in(),
   .data_out(x5_data_wire)
 );
 
@@ -123,14 +128,14 @@ timer #(.DATA_WIDTH(11), .STOP_VALUE(1600)) t0 (
   .int_out()
 );
 
-timer #(.DATA_WIDTH(11), .STOP_VALUE(1599)) t0 (
+timer #(.DATA_WIDTH(11), .STOP_VALUE(1599)) t1 (
   .clock_in(clock_in),
   .reset_in(reset_in),
   .start_in(),
   .int_out()
 );
 
-timer #(.DATA_WIDTH(13), .STOP_VALUE(8000)) t0 (
+timer #(.DATA_WIDTH(13), .STOP_VALUE(8000)) t2 (
   .clock_in(clock_in),
   .reset_in(reset_in),
   .start_in(),
