@@ -8,12 +8,6 @@ module fibonacci_top (
 )
 
 // Wire definition
-
-
-wire mux_sel_wire;
-wire [3:0] mux_data_wire;
-
-
 wire x1_set_wire;
 wire x2_set_wire;
 wire x3_set_wire;
@@ -25,26 +19,37 @@ wire [3:0] x3_data_wire;
 wire [3:0] x4_data_wire;
 wire [3:0] x5_data_wire;
 
+wire mux_sel_wire;
+wire [3:0] mux_data_wire;
+
 wire [3:0] adder_data_wire;
 wire [3:0] dec_data_wire;
 
 wire zero_wire;
 
+wire t0_int_wire;
+wire t1_int_wire;
+wire t2_int_wire;
+wire t0_start_wire;
+wire t1_start_wire;
+wire t2_start_wire;
+
+
 control control0 (
   .clock_in(clock_in),
   .reset_in(reset_in),
   .zero_flag_in(zero_wire)
-  .t0_int_in,
-	.t1_int_in,
-	.t2_int_in,
+  .t0_int_in(t0_int_wire),
+	.t1_int_in(t1_int_wire),
+	.t2_int_in(t2_int_wire),
 	.mux_sel_out(mux_sel_wire),
 	.x1_set_out(x1_set_wire),
 	.x2_set_out(x2_set_wire),
 	.x3_set_out(x3_set_wire),
 	.x4_set_out(x4_set_wire),
-	.t0_start_out,
-	.t1_start_out,
-	.t2_start_out,
+	.t0_start_out(t0_int_wire),
+	.t1_start_out(t1_int_wire),
+	.t2_start_out(t2_int_wire),
 	.led_out(led_out)
 );
 
@@ -111,5 +116,25 @@ zero #(.DATA_WIDTH(4)) zero0 (
   .zero_out(zero_wire)
 );
 
+timer #(.DATA_WIDTH(11), .STOP_VALUE(1600)) t0 (
+  .clock_in(clock_in),
+  .reset_in(reset_in),
+  .start_in(),
+  .int_out()
+);
+
+timer #(.DATA_WIDTH(11), .STOP_VALUE(1599)) t0 (
+  .clock_in(clock_in),
+  .reset_in(reset_in),
+  .start_in(),
+  .int_out()
+);
+
+timer #(.DATA_WIDTH(13), .STOP_VALUE(8000)) t0 (
+  .clock_in(clock_in),
+  .reset_in(reset_in),
+  .start_in(),
+  .int_out()
+);
 
 endmodule
