@@ -11,6 +11,7 @@ module gen_reg (
 
 // Parameter definition
 parameter DATA_WIDTH = 4;
+parameter RESET_VALUE = 0;
 
 // Input and output definition
 input clock_in;
@@ -34,7 +35,7 @@ end
 // Sequential logic
 always @ ( posedge clock_in, posedge reset_in ) begin
   if (reset_in == 1'b1)
-    data_store = 0;
+    data_store = RESET_VALUE;
   else
     data_store = data_hold;
 end
