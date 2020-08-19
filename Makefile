@@ -12,7 +12,6 @@ TOP_MODULE = "fibonacci_top"
 
 simulate:
 	@echo "Performing simulation"
-	@echo $(CPATH)
 	$(VERILATOR) --cc $(VPATH) --exe $(CPATH) --top-module $(TOP_MODULE)
 	make -j -C obj_dir -f Vfibonacci_top.mk
 
