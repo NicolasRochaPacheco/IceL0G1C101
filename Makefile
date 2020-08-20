@@ -8,7 +8,10 @@ CPATH = $(shell find src -name 'simulation.cpp')
 # Gets all the .v files from rtl directory
 VPATH := $(shell find rtl -name '*.v')
 
+# Sets the top module for design
 TOP_MODULE = "fibonacci_top"
+
+
 
 simulate:
 	@echo "Performing simulation"
