@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]) {
   Vfibonacci_top* state = new Vfibonacci_top;
 
   // Creates a constant to set the clock cycle maximum
-  const int NCLOCKS = 100000;
+  const int NCLOCKS = 300000;
 
   // Variable to store the clock cycle
   int cc_val;
