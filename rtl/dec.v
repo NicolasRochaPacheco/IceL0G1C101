@@ -10,11 +10,18 @@ parameter DATA_WIDTH = 4;
 
 // Input and output definition
 input [DATA_WIDTH-1:0] data_in;
-output reg [DATA_WIDTH-1:0] data_out;
+output [DATA_WIDTH-1:0] data_out;
+
+wire [DATA_WIDTH-1:0] data_wire;
 
 // Combinational logic
 always @ ( * ) begin
-  data_out = data_in - 1;
+  if(data_in == 0)
+    data_wire = 0;
+  else
+    data_wire = data_in - 1;
 end
+
+assign data_out = data_wire;
 
 endmodule
