@@ -6,6 +6,7 @@ module control (
 	clock_in,
 	reset_in,
 	zero_flag_in,
+	counter_zero_in,
 	t0_int_in,
 	t1_int_in,
 	t2_int_in,
@@ -14,6 +15,8 @@ module control (
 	x2_set_out,
 	x3_set_out,
 	x4_set_out,
+	x5_set_out,
+	reg_reset_out,
 	t0_start_out,
 	t1_start_out,
 	t2_start_out,
@@ -26,6 +29,7 @@ module control (
 input clock_in;
 input reset_in;
 input zero_flag_in;
+input counter_zero_in;
 input t0_int_in;
 input t1_int_in;
 input t2_int_in;
@@ -34,6 +38,8 @@ output reg x1_set_out;
 output reg x2_set_out;
 output reg x3_set_out;
 output reg x4_set_out;
+output reg x5_set_out;
+output reg reg_reset_out;
 output reg t0_start_out;
 output reg t1_start_out;
 output reg t2_start_out;
@@ -55,6 +61,8 @@ begin // Assigns the output based on the current state
 							x2_set_out = 1'b0;
 							x3_set_out = 1'b1;
 							x4_set_out = 1'b1;
+							x5_set_out = 1'b1;
+							reg_reset_out = 1'b0;
 							t0_start_out = 1'b0;
 							t1_start_out = 1'b0;
 							t2_start_out = 1'b0;
@@ -67,6 +75,8 @@ begin // Assigns the output based on the current state
 							x2_set_out = 1'b0;
 							x3_set_out = 1'b0;
 							x4_set_out = 1'b0;
+							x5_set_out = 1'b0;
+							reg_reset_out = 1'b0;
 							t0_start_out = 1'b0;
 							t1_start_out = 1'b0;
 							t2_start_out = 1'b0;
@@ -79,6 +89,8 @@ begin // Assigns the output based on the current state
 							x2_set_out = 1'b1;
 							x3_set_out = 1'b0;
 							x4_set_out = 1'b0;
+							x5_set_out = 1'b0;
+							reg_reset_out = 1'b0;
 							t0_start_out = 1'b0;
 							t1_start_out = 1'b0;
 							t2_start_out = 1'b0;
@@ -91,6 +103,8 @@ begin // Assigns the output based on the current state
 							x2_set_out = 1'b0;
 							x3_set_out = 1'b0;
 							x4_set_out = 1'b0;
+							x5_set_out = 1'b0;
+							reg_reset_out = 1'b0;
 							t0_start_out = 1'b0;
 							t1_start_out = 1'b1;
 							t2_start_out = 1'b0;
@@ -103,6 +117,8 @@ begin // Assigns the output based on the current state
 							x2_set_out = 1'b0;
 							x3_set_out = 1'b0;
 							x4_set_out = 1'b1;
+							x5_set_out = 1'b0;
+							reg_reset_out = 1'b0;
 							t0_start_out = 1'b0;
 							t1_start_out = 1'b0;
 							t2_start_out = 1'b0;
@@ -113,8 +129,10 @@ begin // Assigns the output based on the current state
 							mux_sel_out = 1'b0;
 							x1_set_out = 1'b0;
 							x2_set_out = 1'b0;
-							x3_set_out = 1'b1;
-							x4_set_out = 1'b1;
+							x3_set_out = 1'b0;
+							x4_set_out = 1'b0;
+							x5_set_out = 1'b0;
+							reg_reset_out = 1'b0;
 							t0_start_out = 1'b1;
 							t1_start_out = 1'b0;
 							t2_start_out = 1'b0;
@@ -125,19 +143,24 @@ begin // Assigns the output based on the current state
 							mux_sel_out = 1'b0;
 							x1_set_out = 1'b0;
 							x2_set_out = 1'b0;
-							x3_set_out = 1'b1;
-							x4_set_out = 1'b1;
+							x3_set_out = 1'b0;
+							x4_set_out = 1'b0;
+							x5_set_out = 1'b0;
+							reg_reset_out = 1'b0;
 							t0_start_out = 1'b0;
 							t1_start_out = 1'b0;
 							t2_start_out = 1'b1;
 							led_out = 1'b0;
 						end
-		default: begin // NONE state
+
+		3'b111: begin // RESET state
 							mux_sel_out = 1'b0;
 							x1_set_out = 1'b0;
 							x2_set_out = 1'b0;
 							x3_set_out = 1'b0;
 							x4_set_out = 1'b0;
+							x5_set_out = 1'b0;
+							reg_reset_out = 1'b1;
 							t0_start_out = 1'b0;
 							t1_start_out = 1'b0;
 							t2_start_out = 1'b0;
@@ -156,23 +179,30 @@ begin
 			3'b000: state_reg = 3'b001;
 			3'b001: state_reg = 3'b010;
 			3'b010: state_reg = 3'b011;
+
 			3'b011: if(t1_int_in)
 								state_reg = 3'b100;
 							else
 								state_reg = 3'b011;
+
 			3'b100: if (zero_flag_in)
 								state_reg = 3'b110;
 							else
 								state_reg = 3'b101;
+
 			3'b101: if (t0_int_in)
 								state_reg = 3'b011;
 							else
 								state_reg = 3'b101;
+
 			3'b110: if(t2_int_in)
-								state_reg = 3'b000;
+								if(counter_zero_in == 1'b1)
+									state_reg = 3'b111;
+								else
+									state_reg = 3'b000;
 							else
 								state_reg = 3'b110;
-			default: state_reg = state_reg;
+			3'b111: state_reg = 3'b000;
 		endcase
 end
 
