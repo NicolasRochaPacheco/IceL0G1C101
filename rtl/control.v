@@ -17,7 +17,9 @@ module control (
 	t0_start_out,
 	t1_start_out,
 	t2_start_out,
-	led_out
+	led_out,
+
+	state_out
 );
 
 // Input and output definition
@@ -36,6 +38,8 @@ output reg t0_start_out;
 output reg t1_start_out;
 output reg t2_start_out;
 output reg led_out;
+
+output [2:0] state_out;
 
 // Registers definition
 reg led_reg;
@@ -171,5 +175,7 @@ begin
 			default: state_reg = state_reg;
 		endcase
 end
+
+assign state_out = state_reg;
 
 endmodule
