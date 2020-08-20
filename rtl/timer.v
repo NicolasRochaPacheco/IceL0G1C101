@@ -19,40 +19,44 @@ input start_in;
 output reg int_out;
 
 // Register definition
-reg enable_reg;
+reg [1:0] status_reg;
 reg [DATA_WIDTH-1:0] counter_reg;
+
+// Combinational logic
+always @ ( * ) begin
+  case (status_reg)
+    2'b00: int_out = 1'b0;
+    2'b01: int_out = 1'b0;
+    2'b10: int_out = 1'b1;
+    default: int_out = 1'b0;
+  endcase
+end
 
 // Sequential logic
 always @ (posedge clock_in, posedge reset_in) begin
-  if(reset_in)
-    begin
-      counter_reg = STOP_VALUE;
-      enable_reg = 1'b0;
-    end
-  else
-    begin
-      if (enable_reg)
-        counter_reg = counter_reg - 1'b1;
-      else
-        counter_reg = counter_reg;
+  if(reset_in) begin
+    status_reg = 2'b00;
+    counter_reg = STOP_VALUE;
+  end else begin
+    case (status_reg)
+      2'b00:  if(start_in == 1'b1)
+                status_reg = 2'b01;
+              else begin
+                status_reg = status_reg;
+                counter_reg = STOP_VALUE;
+              end
 
-      if (start_in)
-        begin
-          enable_reg = 1'b1;
-          counter_reg = counter_reg - 1'b1;
-        end
-      else
-        begin
-          enable_reg = 1'b0;
-          counter_reg = counter_reg;
-        end
-    end
-
-  // Assigns the output value
-  if (counter_reg == 0)
-    int_out = 1'b1;
-  else
-    int_out = 1'b0;
+      2'b01:  if(counter_reg == 0)
+                status_reg = 2'b10;
+              else begin
+                counter_reg = counter_reg - 1;
+                status_reg = status_reg;
+              end
+      2'b10:  status_reg = 2'b00;
+      default: status_reg = 2'b00;
+    endcase
+  end
 end
+
 
 endmodule
