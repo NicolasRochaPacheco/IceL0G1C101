@@ -34,9 +34,10 @@ end
 
 // Sequential logic
 always @ ( posedge clock_in, posedge reset_in ) begin
-  if (reset_in == 1'b1)
+  if (reset_in) begin
     data_store = RESET_VALUE;
-  else
+    data_hold = RESET_VALUE;
+  end else
     data_store = data_hold;
 end
 
